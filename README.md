@@ -1,4 +1,4 @@
-# React App for a My personal Portfolio
+# React App for My personal Portfolio
 
 This is a starter template for building a React application with Node JS.
 
