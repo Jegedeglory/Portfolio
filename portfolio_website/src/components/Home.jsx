@@ -23,7 +23,7 @@ const Home = () => {
             message: document.getElementById('message').value
         };
 
-        axios.post('http://localhost:5000/send-email', formData)
+        axios.post('jegsfolio-backend.vercel.app/send-email', formData)
             .then(response => {
                 if (response.data.success) {
                     alert('Email sent successfully!');
@@ -42,7 +42,7 @@ const Home = () => {
                 <h2 className='visually_hidden'>Header</h2>
                 <div className='wrapper'>
                 <nav className='header_nav'>
-                     <a href="/" className='header_home'>jegshaddy
+                              <a href="/" className='header_home'>jegshaddy
                      <span className='visually_hidden'>{'{to home page}'}</span>
                      </a>
 
