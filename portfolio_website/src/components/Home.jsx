@@ -23,7 +23,7 @@ const Home = () => {
             message: document.getElementById('message').value
         };
 
-        axios.post('jegsfolio-backend.vercel.app/send-email', formData)
+        axios.post('https://jegsfolio-backend.vercel.app/', formData)
             .then(response => {
                 if (response.data.success) {
                     alert('Email sent successfully!');
