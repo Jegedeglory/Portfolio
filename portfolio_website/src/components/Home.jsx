@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import axios from "axios";
 import "./Home.css";
 import Picture348w from "./Images/profile-image-desktop.png";
@@ -11,32 +11,43 @@ import SquidGame from "./Images/Squid_game.jpg";
 import Invalid from "./Images/icon-invalid.svg";
 
 const Home = () => {
-  const form = useRef();
+    const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+    const form = useRef();
 
-  const sendEmail = (e) => {
-    e.preventDefault();
-
-    const formData = {
-      name: document.getElementById("name").value,
-      email: document.getElementById("email").value,
-      message: document.getElementById("message").value,
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
     };
-
-    axios
-      .post("https://jegsfolio-backend.vercel.app/send-email", formData)
-      .then((response) => {
-        if (response.data.success) {
-          alert("Email sent successfully!");
-          form.current.reset();
-        } else {
-          alert("Failed to send email.");
-        }
-      })
-      .catch((error) => {
-        console.error("There was an error sending the email!", error);
-      });
-  };
-
+    const sendEmail = (e) => {
+      e.preventDefault();
+  
+      const formData = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        message: document.getElementById("message").value,
+      };
+  
+      // Adjust this URL based on your environment
+      const apiUrl = process.env.NODE_ENV === 'production'
+        ? "https://jegsfolio-backend.vercel.app/send-email"
+        : "http://localhost:5000/send-email";
+  
+      axios
+        .post(apiUrl, formData)
+        .then((response) => {
+          if (response.data.success) {
+            alert("Email sent successfully!");
+            form.current.reset(); // Clear the form fields
+          } else {
+            alert("Opps!, that didn't go through.");
+          }
+        })
+        .catch((error) => {
+          console.error("There was an error sending the email!", error);
+          alert("Error sending email. Please try again.");
+        });
+    };
+  
   return (
     <div>
       <header className="header">

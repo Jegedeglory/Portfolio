@@ -2,12 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const cors = require('cors');
 const nodemailer = require('nodemailer');
+require('dotenv').config();
+
 
 const app = express();
-app.use(cors({
-    origin: 'https://jegsfolio-backend.vercel.app/',
-    methods: ['GET', 'POST']
-}));
+app.use(cors());
 app.use(bodyParser.json());
 
 app.post('/send-email', (req, res) => {
@@ -16,14 +15,14 @@ app.post('/send-email', (req, res) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'jegsboy007@gmail.com', // Your email address
-            pass: 'yovcfcwjxeohrqnt'   // Your email password or app-specific password
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS
         }
     });
 
     const mailOptions = {
         from: email,
-        to: 'jegsboy007@gmail.com', // Change to your recipient
+        to: process.env.EMAIL_USER, // Change to your recipient
         subject: 'New Contact Form Enquiry',
         html: `<strong>Name:</strong> ${name}<br/><strong>Email:</strong> ${email}<br/><strong>Message:</strong> ${message}`
     };
