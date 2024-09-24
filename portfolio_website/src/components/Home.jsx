@@ -23,10 +23,11 @@ const Home = () => {
     };
 
     axios
-      .post("https://jegsfolio-backend.vercel.app/", formData)
+      .post("https://jegsfolio-backend.vercel.app/send-email", formData)
       .then((response) => {
         if (response.data.success) {
           alert("Email sent successfully!");
+          form.current.reset();
         } else {
           alert("Failed to send email.");
         }
