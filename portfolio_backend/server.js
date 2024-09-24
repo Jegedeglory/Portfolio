@@ -4,7 +4,10 @@ const cors = require('cors');
 const nodemailer = require('nodemailer');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: 'https://jegsfolio-backend.vercel.app/',
+    methods: ['GET', 'POST']
+}));
 app.use(bodyParser.json());
 
 app.post('/send-email', (req, res) => {
