@@ -28,10 +28,11 @@ const Home = () => {
       };
   
       // Adjust this URL based on your environment
-      const apiUrl = process.env.NODE_ENV === 'production'
-        ? "https://jegsfolio-backend.vercel.app/send-email"
-        : "http://localhost:5000/send-email";
-  
+      const apiUrl =  "https://jegsfolio-backend.vercel.app/send";
+      // const apiUrl = process.env.NODE_ENV === 'production'
+      // ? "https://jegsfolio-backend.vercel.app/send"
+      // : "http://localhost:5000/send";
+
       axios
         .post(apiUrl, formData)
         .then((response) => {
@@ -44,7 +45,7 @@ const Home = () => {
         })
         .catch((error) => {
           console.error("There was an error sending the email!", error);
-          alert("Error sending email. Please try again.");
+          alert("Opps!, that didn't go through.");
         });
     };
   
@@ -122,7 +123,7 @@ const Home = () => {
                 <img
                   src={Picture890w}
                   className="hero_image"
-                  alt="picture of Adam"
+                  alt=""
                   width={174}
                   height={383}
                 />
@@ -163,7 +164,42 @@ const Home = () => {
         </section>
         <section className="skills">
           <h2 className="visually_hidden">Skills</h2>
+          <h2 className="projects_headline header_xl wrapper">Tech Stacks</h2>
           <div className="wrapper skills_wrapper bottom_border">
+<p align="center" style={{display: "inline-flex", gap: "20px"}}> 
+  <a href="https://www.figma.com/" target="_blank" rel="noreferrer"> 
+    <img src="https://www.vectorlogo.zone/logos/figma/figma-icon.svg" alt="figma" style={{width: "clamp(2.5rem, 0.4167rem + 6.6667vw, 6.25rem)", height:"clamp(2.5rem, 0.4167rem + 6.6667vw, 6.25rem)"}}/> 
+  </a> 
+  <a href="https://www.w3.org/html/" target="_blank" rel="noreferrer"> 
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" style={{width: "clamp(2.5rem, 0.4167rem + 6.6667vw, 6.25rem)", height:"clamp(2.5rem, 0.4167rem + 6.6667vw, 6.25rem)"}}/> 
+  </a> 
+  <a href="https://www.w3schools.com/css/" target="_blank" rel="noreferrer"> 
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="css3" style={{width: "clamp(2.5rem, 0.4167rem + 6.6667vw, 6.25rem)", height:"clamp(2.5rem, 0.4167rem + 6.6667vw, 6.25rem)"}}/> 
+  </a> 
+  <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> 
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" style={{width: "clamp(2.5rem, 0.4167rem + 6.6667vw, 6.25rem)", height:"clamp(2.5rem, 0.4167rem + 6.6667vw, 6.25rem)"}}/> 
+  </a> 
+  <a href="https://reactjs.org/" target="_blank" rel="noreferrer"> 
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original-wordmark.svg" alt="react" style={{width: "clamp(2.5rem, 0.4167rem + 6.6667vw, 6.25rem)", height:"clamp(2.5rem, 0.4167rem + 6.6667vw, 6.25rem)"}}/> 
+  </a> 
+  <a href="https://nextjs.org/" target="_blank" rel="noreferrer"> 
+    <img src="https://cdn.worldvectorlogo.com/logos/nextjs-2.svg" alt="nextjs" style={{width: "clamp(2.5rem, 0.4167rem + 6.6667vw, 6.25rem)", height:"clamp(2.5rem, 0.4167rem + 6.6667vw, 6.25rem)"}}/> 
+  </a> 
+  <a href="https://sass-lang.com" target="_blank" rel="noreferrer"> 
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/sass/sass-original.svg" alt="sass" style={{width: "clamp(2.5rem, 0.4167rem + 6.6667vw, 6.25rem)", height:"clamp(2.5rem, 0.4167rem + 6.6667vw, 6.25rem)"}}/> 
+  </a> 
+  <a href="https://tailwindcss.com/" target="_blank" rel="noreferrer"> 
+    <img src="https://www.vectorlogo.zone/logos/tailwindcss/tailwindcss-icon.svg" alt="tailwind" style={{width: "clamp(2.5rem, 0.4167rem + 6.6667vw, 6.25rem)", height:"clamp(2.5rem, 0.4167rem + 6.6667vw, 6.25rem)"}}/> 
+  </a> 
+  <a href="https://www.typescriptlang.org/" target="_blank" rel="noreferrer"> 
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg" alt="typescript" style={{width: "clamp(2.5rem, 0.4167rem + 6.6667vw, 6.25rem)", height:"clamp(2.5rem, 0.4167rem + 6.6667vw, 6.25rem)"}}/> 
+  </a> 
+  <br />
+</p>
+
+
+{/* <div>
+
             <div className="skills_item">
               <h3 className="skills_title">HTML</h3>
               <p className="skills_description">2 years experience</p>
@@ -188,7 +224,8 @@ const Home = () => {
               <h3 className="skills_title">Express JS</h3>
               <p className="skills_description">1 year experience</p>
             </div>
-          </div>
+          </div> */}
+</div>
           <img
             src={Ring}
             alt=""

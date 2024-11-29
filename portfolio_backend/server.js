@@ -9,7 +9,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-app.post('/send-email', (req, res) => {
+app.post('/send', (req, res) => {
     const { name, email, message } = req.body;
 
     const transporter = nodemailer.createTransport({
