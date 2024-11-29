@@ -1,0 +1,13 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "api/send.js",
+            "use": "@vercel/node"
+        }
+    ],
+    "env": {
+        "EMAIL_USER": "@email_user",
+        "EMAIL_PASS": "@email_pass"
+    }
+}

@@ -21,11 +21,14 @@ const Home = () => {
     const sendEmail = (e) => {
       e.preventDefault();
   
-      const formData = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        message: document.getElementById("message").value,
-      };
+      // const formData = {
+      //   name: document.getElementById("name").value,
+      //   email: document.getElementById("email").value,
+      //   message: document.getElementById("message").value,
+      // };
+
+
+      const { name, email, message } = formData;
   
       // Adjust this URL based on your environment
       // const apiUrl =  "https://jegsfolio-backend.vercel.app/send";
@@ -34,20 +37,21 @@ const Home = () => {
       : "http://localhost:5000/send";
 
       axios
-        .post(apiUrl, formData)
-        .then((response) => {
-          if (response.data.success) {
-            alert("Email sent successfully!");
-            form.current.reset(); // Clear the form fields
-          } else {
-            alert("Opps!, that didn't go through.");
-          }
-        })
-        .catch((error) => {
-          console.error("There was an error sending the email!", error);
-          alert("Opps!, that didn't go through.");
-        });
-    };
+      .post(apiUrl, { name, email, message })
+      .then((response) => {
+        if (response.data.success) {
+          alert("Email sent successfully!");
+          form.current.reset(); // Clear the form fields
+          setFormData({ name: '', email: '', message: '' }); // Reset the formData state
+        } else {
+          alert("Oops! That didn't go through.");
+        }
+      })
+      .catch((error) => {
+        console.error("There was an error sending the email!", error);
+        alert("Oops! That didn't go through.");
+      });
+  };
   
   return (
     <div>
