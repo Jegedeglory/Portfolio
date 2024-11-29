@@ -28,10 +28,10 @@ const Home = () => {
       };
   
       // Adjust this URL based on your environment
-      const apiUrl =  "https://jegsfolio-backend.vercel.app/send";
-      // const apiUrl = process.env.NODE_ENV === 'production'
-      // ? "https://jegsfolio-backend.vercel.app/send"
-      // : "http://localhost:5000/send";
+      // const apiUrl =  "https://jegsfolio-backend.vercel.app/send";
+      const apiUrl = process.env.NODE_ENV === 'production'
+      ? "https://jegsfolio-backend.vercel.app/send"
+      : "http://localhost:5000/send";
 
       axios
         .post(apiUrl, formData)
