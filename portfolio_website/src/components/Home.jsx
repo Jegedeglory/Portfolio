@@ -9,6 +9,7 @@ import Circle from "./Images/Oval1.svg";
 import AnimalDesign from "./Images/Dog_sales.jpg";
 import SquidGame from "./Images/Squid_game.jpg";
 import Invalid from "./Images/icon-invalid.svg";
+import Soole from "./Images/Soole.png";
 
 const Home = () => {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -245,6 +246,33 @@ const Home = () => {
                 {" "}
                 Contact me
               </a>
+
+              <div className="projects_item">
+                <picture className="projects_picture">
+                  <source media="(min-width: 62.5em)" srcSet={Soole} />
+                  <img
+                    src={Soole}
+                    alt=""
+                    width={343}
+                    height={253}
+                    className="projects_image"
+                  />
+                </picture>
+                <h3 className="projects_name">Squid game</h3>
+                <p className="project_tags">
+                  <span>HTML</span>
+                  <span>CSS</span>
+                  <span>Javascript</span>
+                </p>
+                <div className="projects_links">
+                  <a href="https://soole.vercel.app/" className="underline">
+                    View Project
+                  </a>
+                  <a href="https://github.com/Jegedeglory/soole" className="underline">
+                    View code
+                  </a>
+                </div>
+              </div>
               <div className="projects_item">
                 <picture className="projects_picture">
                   <source media="(min-width: 62.5em)" srcSet={AnimalDesign} />
