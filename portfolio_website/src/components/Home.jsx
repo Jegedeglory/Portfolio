@@ -258,7 +258,7 @@ const Home = () => {
                     className="projects_image"
                   />
                 </picture>
-                <h3 className="projects_name">Squid game</h3>
+                <h3 className="projects_name">SOOLE</h3>
                 <p className="project_tags">
                   <span>HTML</span>
                   <span>CSS</span>
