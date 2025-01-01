@@ -39,7 +39,7 @@ const Home = () => {
         .then((response) => {
           if (response.data.success) {
             alert("Email sent successfully!");
-            form.current.reset(); // Clear the form fields
+            form.current.reset();
           } else {
             alert("Opps!, that didn't go through.");
           }
