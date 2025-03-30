@@ -265,7 +265,7 @@ const Home = () => {
                   <span>Javascript</span>
                 </p>
                 <div className="projects_links">
-                  <a href="https://soole.vercel.app/" className="underline">
+                  <a href="https://soole-waitlist.vercel.app/" className="underline">
                     View Project
                   </a>
                   <a href="https://github.com/Jegedeglory/soole" className="underline">

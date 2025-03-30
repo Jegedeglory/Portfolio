@@ -22,7 +22,7 @@ app.post('/send', (req, res) => {
 
     const mailOptions = {
         from: email,
-        to: process.env.EMAIL_USER, // Change to your recipient
+        to: process.env.EMAIL_USER,
         subject: 'New Contact Form Enquiry',
         html: `<strong>Name:</strong> ${name}<br/><strong>Email:</strong> ${email}<br/><strong>Message:</strong> ${message}`
     };
