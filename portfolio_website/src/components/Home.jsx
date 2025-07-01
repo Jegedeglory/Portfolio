@@ -10,6 +10,7 @@ import AnimalDesign from "./Images/Dog_sales.jpg";
 import SquidGame from "./Images/Squid_game.jpg";
 import Invalid from "./Images/icon-invalid.svg";
 import Soole from "./Images/Soole.png";
+import Chacebyte from "./Images/Chacebyte.png";
 
 const Home = () => {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -275,6 +276,34 @@ const Home = () => {
               </div>
               <div className="projects_item">
                 <picture className="projects_picture">
+                  <source media="(min-width: 62.5em)" srcSet={Chacebyte} />
+                  <img
+                    src={Chacebyte}
+                    alt=""
+                    width={343}
+                    height={253}
+                    className="projects_image"
+                  />
+                </picture>
+                <h3 className="projects_name">Chacebyte</h3>
+                <p className="project_tags">
+                  <span>HTML</span>
+                  <span>SCSS</span>
+                  <span>TYPESCRIPT</span>
+                  <span>REACT</span>
+                  <span>API INTEGRATION</span>
+                </p>
+                <div className="projects_links">
+                  <a href="/" className="underline">
+                    View Project
+                  </a>
+                  <a href="https://www.chacebyteng.com/" className="underline">
+                    View code
+                  </a>
+                </div>
+              </div>
+              <div className="projects_item">
+                <picture className="projects_picture">
                   <source media="(min-width: 62.5em)" srcSet={AnimalDesign} />
                   <img
                     src={AnimalDesign}
@@ -323,6 +352,7 @@ const Home = () => {
                   </a>
                 </div>
               </div>
+
             </div>
           </div>
         </section>
