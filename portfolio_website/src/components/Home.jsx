@@ -344,10 +344,10 @@ const Home = () => {
                   <span>CSS</span>
                 </p>
                 <div className="projects_links">
-                  <a href="/" className="underline">
+                  <a href="https://dashboard.nobox.cloud/upload/folders/67ebba38e9ce287a7ac15b4c" className="underline">
                     View Project
                   </a>
-                  <a href="/" className="underline">
+                  <a href="https://github.com/Jegedeglory" className="underline">
                     View code
                   </a>
                 </div>
