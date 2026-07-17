@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import axios from "axios";
 import "./Home.css";
 import Picture348w from "./Images/profile-image-desktop.png";
@@ -15,13 +15,8 @@ import AIGenius from "./Images/AIGenius.png";
 import Nobox from "./Images/Nobox.png";
 
 const Home = () => {
-    const [formData, setFormData] = useState({ name: '', email: '', message: '' });
     const form = useRef();
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
     const sendEmail = (e) => {
       e.preventDefault();
   
