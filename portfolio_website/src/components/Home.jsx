@@ -11,6 +11,8 @@ import SquidGame from "./Images/Squid_game.jpg";
 import Invalid from "./Images/icon-invalid.svg";
 import Soole from "./Images/Soole.png";
 import Chacebyte from "./Images/Chacebyte.png";
+import AIGenius from "./Images/AIGenius.png";
+import Nobox from "./Images/Nobox.png";
 
 const Home = () => {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -30,10 +32,9 @@ const Home = () => {
       };
   
       // Adjust this URL based on your environment
-      // const apiUrl =  "https://jegsfolio-backend.vercel.app/send";
-      const apiUrl = process.env.NODE_ENV === 'production'
-      ? "https://portfolio-cwjm.onrender.com/send"
-      : "http://localhost:5000/send";
+      // In development: leave unset and it will use localhost
+      // In production: set REACT_APP_BACKEND_URL to your deployed backend URL
+      const apiUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000/send";
 
       axios
         .post(apiUrl, formData)
@@ -294,10 +295,63 @@ const Home = () => {
                   <span>API INTEGRATION</span>
                 </p>
                 <div className="projects_links">
-                  <a href="/" className="underline">
+                  <a href="https://www.chacebyteng.com/" className="underline">
                     View Project
                   </a>
-                  <a href="https://www.chacebyteng.com/" className="underline">
+                  <a href="https://github.com/Jegedeglory" className="underline">
+                    View code
+                  </a>
+                </div>
+              </div>
+              <div className="projects_item">
+                <picture className="projects_picture">
+                  <source media="(min-width: 62.5em)" srcSet={AIGenius} />
+                  <img
+                    src={AIGenius}
+                    alt=""
+                    width={343}
+                    height={253}
+                    className="projects_image"
+                  />
+                </picture>
+                <h3 className="projects_name">AI Genius</h3>
+                <p className="project_tags">
+                  <span>AI</span>
+                  <span>CHATBOT</span>
+                  <span>REACT</span>
+                  <span>API</span>
+                </p>
+                <div className="projects_links">
+                  <a href="https://aigenius.chat" className="underline">
+                    View Project
+                  </a>
+                  <a href="https://github.com/Jegedeglory" className="underline">
+                    View code
+                  </a>
+                </div>
+              </div>
+              <div className="projects_item">
+                <picture className="projects_picture">
+                  <source media="(min-width: 62.5em)" srcSet={Nobox} />
+                  <img
+                    src={Nobox}
+                    alt=""
+                    width={343}
+                    height={253}
+                    className="projects_image"
+                  />
+                </picture>
+                <h3 className="projects_name">NOBOX</h3>
+                <p className="project_tags">
+                  <span>UI/UX</span>
+                  <span>REACT</span>
+                  <span>API</span>
+                </p>
+                <div className="projects_links">
+                  <a href="https://nobox-site.vercel.app" className="underline">
+                    View Project
+                  </a>
+                  <a href="https://github.com/Jegedeglory" className="underline">
                     View code
                   </a>
                 </div>
