@@ -97,6 +97,14 @@ app.post('/send', async (req, res) => {
     };
 
     // ── Send ──────────────────────────────────────────────────────────────────
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+        console.error('❌ EMAIL_USER or EMAIL_PASS environment variables are not configured in .env');
+        return res.status(500).json({
+            success: false,
+            error: 'Server email credentials are not configured. Please set EMAIL_USER and EMAIL_PASS in .env',
+        });
+    }
+
     try {
         const transporter = createTransporter();
         // Verify credentials on startup (optional but helpful for debugging)

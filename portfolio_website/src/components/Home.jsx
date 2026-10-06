@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import "./Home.css";
 import Picture348w from "./Images/profile-image-desktop.png";
@@ -14,41 +14,415 @@ import Chacebyte from "./Images/Chacebyte.png";
 import AIGenius from "./Images/AIGenius.png";
 import Nobox from "./Images/Nobox.png";
 
-const Home = () => {
-    const form = useRef();
+// ─── Chatbot Knowledge Base ───────────────────────────────────────────────────
+const WHATSAPP_LINK = "https://wa.link/slcgup";
+const CALENDLY_LINK = "https://calendly.com/jegedeglory007/quick-update-call";
+const FORMSUBMIT_TOKEN = "0ecb6e1d1765e420a5a2db8c0dcb8e47";
 
-    const sendEmail = (e) => {
-      e.preventDefault();
-  
-      const formData = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        message: document.getElementById("message").value,
-      };
-  
-      // Adjust this URL based on your environment
-      // In development: leave unset and it will use localhost
-      // In production: set REACT_APP_BACKEND_URL to your deployed backend URL
-      const apiUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000/send";
+const getBotReply = (userMsg) => {
+  const msg = userMsg.toLowerCase().trim();
 
-      axios
-        .post(apiUrl, formData)
-        .then((response) => {
-          if (response.data.success) {
-            alert("Email sent successfully!");
-            form.current.reset();
-          } else {
-            alert("Opps!, that didn't go through.");
-          }
-        })
-        .catch((error) => {
-          console.error("There was an error sending the email!", error);
-          alert("Opps!, that didn't go through.");
-        });
+  // Greetings
+  if (/^(hi|hello|hey|howdy|hiya|good\s*(morning|afternoon|evening))/.test(msg)) {
+    return {
+      text: "Hey there! 👋 I'm Jegshaddy's assistant. I can tell you about his services, pricing, availability, or help you book a call. What would you like to know?",
+      actions: [],
     };
-  
+  }
+
+  // Pricing / rates
+  if (/pric|rate|cost|how much|fee|charge|budget/.test(msg)) {
+    return {
+      text: "💰 Pricing depends on the scope of the project:\n\n• **Landing pages** — starting from $200\n• **Full websites / web apps** — from $500\n• **UI/UX Design** — from $150\n• **Monthly retainer** — custom packages available\n\nFor an accurate quote tailored to your project, let's jump on a quick call!",
+      actions: [
+        { label: "📅 Book a Call", url: CALENDLY_LINK },
+        { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
+      ],
+    };
+  }
+
+  // Availability
+  if (/availab|free|schedule|when|timeline|start|begin|deadline/.test(msg)) {
+    return {
+      text: "📅 I'm currently open to new projects! My typical turnaround:\n\n• Landing pages — 3–5 days\n• Full web apps — 2–6 weeks\n• Design only — 1–2 weeks\n\nWant to lock in a time to discuss your project?",
+      actions: [
+        { label: "📅 Book a Call", url: CALENDLY_LINK },
+        { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
+      ],
+    };
+  }
+
+  // Services
+  if (/service|do you|what can|offer|build|create|develop|design|help|crm|automat|email market|wix|wordpress|webflow|squarespace/.test(msg)) {
+    return {
+      text: "🛠️ Here's what I do:\n\n• **Frontend Development** — React, Next.js, HTML/CSS\n• **UI/UX Design** — Figma, responsive design\n• **Full-Stack Web Apps** — with backend & database\n• **CRM & Automations** — workflow automation, integrations\n• **Email Marketing** — campaigns, funnels, sequences\n• **No-Code Websites** — Wix, WordPress, Webflow, Squarespace\n\nAnd more! The best way to find out if I can help with your specific project is to jump on a quick call.",
+      actions: [
+        { label: "📅 Book a Call", url: CALENDLY_LINK },
+        { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
+      ],
+    };
+  }
+
+  // Book a call / meeting
+  if (/book|call|meeting|schedule|calendly|talk|speak|consult|discuss/.test(msg)) {
+    return {
+      text: "Let's talk! 🤝 You can book a free 30-minute discovery call directly on my Calendly — no strings attached.",
+      actions: [{ label: "📅 Book a Call Now", url: CALENDLY_LINK }],
+    };
+  }
+
+  // WhatsApp
+  if (/whatsapp|whats app|wp|wa|chat|message|text/.test(msg)) {
+    return {
+      text: "You can reach me directly on WhatsApp for a quicker response! 📲",
+      actions: [{ label: "💬 Open WhatsApp", url: WHATSAPP_LINK }],
+    };
+  }
+
+  // Contact
+  if (/contact|email|reach|get in touch/.test(msg)) {
+    return {
+      text: "You can reach out via the contact form below, WhatsApp, or book a call. Pick what works best for you!",
+      actions: [
+        { label: "📅 Book a Call", url: CALENDLY_LINK },
+        { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
+      ],
+    };
+  }
+
+  // Bye / thank you
+  if (/bye|goodbye|thanks|thank you|cheers|later/.test(msg)) {
+    return {
+      text: "Thanks for stopping by! 🙏 Feel free to come back anytime. Have a great day! 🚀",
+      actions: [],
+    };
+  }
+
+  // Fallback
+  return {
+    text: "That's a great question! The best way to get a proper answer is to book a quick call — Jegshaddy will be happy to walk you through everything. 📅",
+    actions: [
+      { label: "📅 Book a Call", url: CALENDLY_LINK },
+      { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
+    ],
+  };
+};
+
+// ─── Toast Component ──────────────────────────────────────────────────────────
+const Toast = ({ message, type, visible }) => (
+  <div className={`toast toast_${type} ${visible ? "toast_visible" : ""}`}>
+    <span>{type === "success" ? "✅" : "❌"}</span>
+    <p>{message}</p>
+  </div>
+);
+
+// ─── Chatbot Component ────────────────────────────────────────────────────────
+const Chatbot = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      from: "bot",
+      text: "Hi there! 👋 I'm Jegshaddy's virtual assistant. Ask me anything — pricing, services, availability, or how to get in touch!",
+      actions: [
+        { label: "💼 Services", trigger: "services" },
+        { label: "💰 Pricing", trigger: "pricing" },
+        { label: "📅 Book a Call", url: CALENDLY_LINK },
+        { label: "💬 WhatsApp", url: WHATSAPP_LINK },
+      ],
+    },
+  ]);
+  const [inputVal, setInputVal] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [hasUnread, setHasUnread] = useState(true);
+  const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
+  const idCounter = useRef(2);
+
+  const scrollToBottom = useCallback(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      scrollToBottom();
+      setHasUnread(false);
+      setTimeout(() => inputRef.current?.focus(), 100);
+    }
+  }, [isOpen, messages, scrollToBottom]);
+
+  const addMessage = (from, text, actions = []) => {
+    const id = idCounter.current++;
+    setMessages((prev) => [...prev, { id, from, text, actions }]);
+    return id;
+  };
+
+  const handleSend = useCallback(
+    (textOverride) => {
+      const text = (textOverride || inputVal).trim();
+      if (!text) return;
+
+      addMessage("user", text);
+      setInputVal("");
+      setIsTyping(true);
+
+      setTimeout(() => {
+        const reply = getBotReply(text);
+        setIsTyping(false);
+        addMessage("bot", reply.text, reply.actions);
+      }, 800 + Math.random() * 400);
+    },
+    [inputVal]
+  );
+
+  const handleQuickAction = (action) => {
+    if (action.trigger) {
+      // Quick reply chip that sends a predefined message
+      handleSend(action.trigger);
+    } else if (action.url) {
+      window.open(action.url, "_blank", "noopener,noreferrer");
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  const formatText = (text) => {
+    // Bold **text** and line breaks
+    return text.split("\n").map((line, i) => {
+      const parts = line.split(/\*\*(.*?)\*\*/g);
+      return (
+        <React.Fragment key={i}>
+          {parts.map((part, j) =>
+            j % 2 === 1 ? <strong key={j}>{part}</strong> : part
+          )}
+          {i < text.split("\n").length - 1 && <br />}
+        </React.Fragment>
+      );
+    });
+  };
+
+  return (
+    <>
+      {/* Toggle Button */}
+      <button
+        className="chatbot_toggle"
+        onClick={() => setIsOpen((prev) => !prev)}
+        aria-label={isOpen ? "Close chat" : "Open chat"}
+        aria-expanded={isOpen}
+      >
+        {isOpen ? (
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        ) : (
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+        )}
+        {hasUnread && !isOpen && <span className="chatbot_badge">1</span>}
+      </button>
+
+      {/* Chat Window */}
+      <div className={`chatbot_window ${isOpen ? "chatbot_open" : ""}`} role="dialog" aria-label="Chat assistant">
+        <div className="chatbot_header">
+          <div className="chatbot_avatar">JG</div>
+          <div className="chatbot_header_info">
+            <h3>Jegshaddy's Assistant</h3>
+            <span className="chatbot_status">
+              <span className="chatbot_dot"></span> Online
+            </span>
+          </div>
+          <button
+            className="chatbot_close_btn"
+            onClick={() => setIsOpen(false)}
+            aria-label="Close chat"
+          >
+            ×
+          </button>
+        </div>
+
+        <div className="chatbot_messages" role="log" aria-live="polite">
+          {messages.map((msg) => (
+            <div key={msg.id} className={`chatbot_message chatbot_message_${msg.from}`}>
+              {msg.from === "bot" && (
+                <div className="chatbot_msg_avatar">JG</div>
+              )}
+              <div className="chatbot_bubble">
+                <p>{formatText(msg.text)}</p>
+                {msg.actions && msg.actions.length > 0 && (
+                  <div className="chatbot_actions">
+                    {msg.actions.map((action, i) => (
+                      <button
+                        key={i}
+                        className="chatbot_action_btn"
+                        onClick={() => handleQuickAction(action)}
+                      >
+                        {action.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+          {isTyping && (
+            <div className="chatbot_message chatbot_message_bot">
+              <div className="chatbot_msg_avatar">JG</div>
+              <div className="chatbot_bubble chatbot_typing">
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
+
+        <div className="chatbot_input_area">
+          <input
+            ref={inputRef}
+            type="text"
+            placeholder="Ask me anything..."
+            value={inputVal}
+            onChange={(e) => setInputVal(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="chatbot_input"
+            aria-label="Type a message"
+          />
+          <button
+            className="chatbot_send_btn"
+            onClick={() => handleSend()}
+            aria-label="Send message"
+            disabled={!inputVal.trim()}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13" />
+              <polygon points="22 2 15 22 11 13 2 9 22 2" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </>
+  );
+};
+
+// ─── Main Home Component ──────────────────────────────────────────────────────
+const Home = () => {
+  const form = useRef();
+  const [toast, setToast] = useState({ visible: false, message: "", type: "success" });
+  const [isSending, setIsSending] = useState(false);
+
+  const showToast = (message, type = "success") => {
+    setToast({ visible: true, message, type });
+    setTimeout(() => setToast((t) => ({ ...t, visible: false })), 4000);
+  };
+
+  const sendEmail = async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("name")?.value?.trim() || "";
+    const email = document.getElementById("email")?.value?.trim() || "";
+    const message = document.getElementById("message")?.value?.trim() || "";
+
+    if (!name || !email || !message) {
+      showToast("Please fill in all fields before sending.", "error");
+      return;
+    }
+
+    setIsSending(true);
+
+    const formData = { name, email, message };
+
+    // 1. If a custom backend URL is explicitly configured, try it first
+    if (process.env.REACT_APP_BACKEND_URL) {
+      try {
+        const response = await axios.post(
+          process.env.REACT_APP_BACKEND_URL,
+          formData
+        );
+        if (response.data && response.data.success) {
+          setIsSending(false);
+          showToast("Message sent! I'll get back to you soon. 🎉", "success");
+          if (form.current) form.current.reset();
+          return;
+        }
+      } catch (backendError) {
+        console.warn(
+          "Custom backend unavailable, falling back to direct delivery:",
+          backendError
+        );
+      }
+    }
+
+    // 2. Direct delivery to Gmail via FormSubmit (reliable, no local server needed)
+    try {
+      const response = await axios.post(
+        `https://formsubmit.co/ajax/${FORMSUBMIT_TOKEN}`,
+        {
+          name,
+          email,
+          message,
+          _subject: `New Portfolio Message from ${name}`,
+          _template: "table",
+          _captcha: "false",
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      );
+
+      setIsSending(false);
+
+      const resData = response.data || {};
+      const isSuccess =
+        resData.success === true ||
+        resData.success === "true" ||
+        resData.status === "success";
+      const isActivation =
+        typeof resData.message === "string" &&
+        resData.message.toLowerCase().includes("activation");
+
+      if (isSuccess) {
+        showToast("Message sent! I'll get back to you soon. 🎉", "success");
+        if (form.current) form.current.reset();
+      } else if (isActivation) {
+        showToast(
+          "Activation email sent to jegsboy007@gmail.com! Please click 'Activate Form' in your inbox (one-time setup).",
+          "success"
+        );
+        if (form.current) form.current.reset();
+      } else {
+        showToast(
+          resData.message || "Oops! That didn't go through. Please try again.",
+          "error"
+        );
+      }
+    } catch (error) {
+      setIsSending(false);
+      console.error("Error sending email:", error);
+      showToast("Oops! That didn't go through. Please try again.", "error");
+    }
+  };
+
   return (
     <div>
+      {/* ── Toast Notification ── */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        visible={toast.visible}
+      />
+
+      {/* ── Chatbot ── */}
+      <Chatbot />
+
       <header className="header">
         <h2 className="visually_hidden">Header</h2>
         <div className="wrapper">
@@ -147,15 +521,27 @@ const Home = () => {
                 </h1>
                 <p className="hero_description">
                   Based in Nigeria, I'm a Software developer, aspiring to build
-                  & learn new things about the web that users love
+                  &amp; learn new things about the web that users love
                 </p>
-                <a
-                  href="https://wa.link/slcgup"
-                  className="hero_contact underline"
-                >
-                  {" "}
-                  Contact me
-                </a>
+                {/* ── Hero CTA Buttons ── */}
+                <div className="hero_cta_group">
+                  <a
+                    href="https://wa.link/slcgup"
+                    className="hero_contact underline"
+                  >
+                    {" "}
+                    Contact me
+                  </a>
+                  <a
+                    href={CALENDLY_LINK}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hero_book_call underline"
+                  >
+                    {" "}
+                    Book a Call
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -196,33 +582,6 @@ const Home = () => {
 </p>
 
 
-{/* <div>
-
-            <div className="skills_item">
-              <h3 className="skills_title">HTML</h3>
-              <p className="skills_description">2 years experience</p>
-            </div>
-            <div className="skills_item">
-              <h3 className="skills_title">CSS</h3>
-              <p className="skills_description">2 years experience</p>
-            </div>
-            <div className="skills_item">
-              <h3 className="skills_title">Javascript</h3>
-              <p className="skills_description">2 years experience</p>
-            </div>
-            <div className="skills_item">
-              <h3 className="skills_title">React JS</h3>
-              <p className="skills_description">2 years experience</p>
-            </div>
-            <div className="skills_item">
-              <h3 className="skills_title">Typescript</h3>
-              <p className="skills_description">1 year experience</p>
-            </div>
-            <div className="skills_item">
-              <h3 className="skills_title">Express JS</h3>
-              <p className="skills_description">1 year experience</p>
-            </div>
-          </div> */}
 </div>
           <img
             src={Ring}
@@ -255,7 +614,7 @@ const Home = () => {
                     className="projects_image"
                   />
                 </picture>
-                <h3 className="projects_name">SOÓLÈ</h3>
+                <h3 className="projects_name">SOÓLÈ</h3>
                 <p className="project_tags">
                   <span>HTML</span>
                   <span>CSS</span>
@@ -414,6 +773,27 @@ const Home = () => {
                 of help. Please, feel free to enlighten me about it and I will
                 get back to you as soon as possible.
               </p>
+              {/* ── Quick contact options ── */}
+              <div className="contact_quick_actions">
+                <a
+                  href={CALENDLY_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
+                  {" "}
+                  Book a Call
+                </a>
+                <a
+                  href={WHATSAPP_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
+                  {" "}
+                  WhatsApp
+                </a>
+              </div>
             </div>
             <form
               action=""
@@ -480,7 +860,9 @@ const Home = () => {
                 />
               </div>
               <div className="contact_control align_right">
-                <button type="submit">Send Message</button>
+                <button type="submit" disabled={isSending}>
+                  {isSending ? "Sending..." : "Send Message"}
+                </button>
               </div>
             </form>
           </div>
