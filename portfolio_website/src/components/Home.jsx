@@ -33,7 +33,7 @@ const getBotReply = (userMsg) => {
   // Pricing / rates
   if (/pric|rate|cost|how much|fee|charge|budget/.test(msg)) {
     return {
-      text: "💰 Pricing depends on the scope of the project:\n\n• **Landing pages** — starting from $200\n• **Full websites / web apps** — from $500\n• **UI/UX Design** — from $150\n• **Monthly retainer** — custom packages available\n\nFor an accurate quote tailored to your project, let's jump on a quick call!",
+      text: "💰 Pricing depends on the scope of the project:\n\n• **Landing pages** — starting from $200\n• **Full websites / web apps** — from $400\n• **UI/UX Design** — from $200\n• **Monthly retainer** — custom packages available\n\nFor an accurate quote tailored to your project, let's jump on a quick call!",
       actions: [
         { label: "📅 Book a Call", url: CALENDLY_LINK },
         { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
@@ -44,7 +44,7 @@ const getBotReply = (userMsg) => {
   // Availability
   if (/availab|free|schedule|when|timeline|start|begin|deadline/.test(msg)) {
     return {
-      text: "📅 I'm currently open to new projects! My typical turnaround:\n\n• Landing pages — 3–5 days\n• Full web apps — 2–6 weeks\n• Design only — 1–2 weeks\n\nWant to lock in a time to discuss your project?",
+      text: "📅 I'm currently open to new projects! My typical turnaround:\n\n• Landing pages — 3–5 days\n• Full web apps — 2–8 weeks\n• Design only — 1–3 weeks\n\nWant to lock in a time to discuss your project?",
       actions: [
         { label: "📅 Book a Call", url: CALENDLY_LINK },
         { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
@@ -55,7 +55,7 @@ const getBotReply = (userMsg) => {
   // Services
   if (/service|do you|what can|offer|build|create|develop|design|help|crm|automat|email market|wix|wordpress|webflow|squarespace/.test(msg)) {
     return {
-      text: "🛠️ Here's what I do:\n\n• **Frontend Development** — React, Next.js, HTML/CSS\n• **UI/UX Design** — Figma, responsive design\n• **Full-Stack Web Apps** — with backend & database\n• **CRM & Automations** — workflow automation, integrations\n• **Email Marketing** — campaigns, funnels, sequences\n• **No-Code Websites** — Wix, WordPress, Webflow, Squarespace\n\nAnd more! The best way to find out if I can help with your specific project is to jump on a quick call.",
+      text: "🛠️ Here's what I do:\n\n• **Frontend Development** — React, Next.js, HTML/CSS\n• **UI/UX Design** — Figma, responsive design\n• **Full-Stack Web Apps $ and Mobile app development** — with backend & database\n• **CRM & Automations** — workflow automation, integrations\n• **Email Marketing** — campaigns, funnels, sequences\n• **No-Code Websites** — Wix, WordPress, Webflow, Squarespace\n\nAnd more! The best way to find out if I can help with your specific project is to jump on a quick call.",
       actions: [
         { label: "📅 Book a Call", url: CALENDLY_LINK },
         { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
