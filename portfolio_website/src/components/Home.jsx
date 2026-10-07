@@ -15,7 +15,7 @@ import AIGenius from "./Images/AIGenius.png";
 import Nobox from "./Images/Nobox.png";
 
 // ─── Chatbot Knowledge Base ───────────────────────────────────────────────────
-const WHATSAPP_LINK = "https://wa.link/slcgup";
+const WHATSAPP_LINK = "https://wa.me/2349167712906";
 const CALENDLY_LINK = "https://calendly.com/jegedeglory007/quick-update-call";
 const FORMSUBMIT_TOKEN = "0ecb6e1d1765e420a5a2db8c0dcb8e47";
 
