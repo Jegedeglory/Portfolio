@@ -20,20 +20,137 @@ const CALENDLY_LINK = "https://calendly.com/jegedeglory007/quick-update-call";
 const FORMSUBMIT_TOKEN = "0ecb6e1d1765e420a5a2db8c0dcb8e47";
 
 const getBotReply = (userMsg) => {
-  const msg = userMsg.toLowerCase().trim();
+  const raw = (userMsg || "").trim();
+  const msg = raw.toLowerCase().replace(/[^\w\s@.-]/g, " ").replace(/\s+/g, " ").trim();
 
-  // Greetings
-  if (/^(hi|hello|hey|howdy|hiya|good\s*(morning|afternoon|evening))/.test(msg)) {
+  // ── 1. Pleasantries & Greetings ──
+  if (/^(thank|thanks|thx|appreciate|cheers|good job|awesome|great work|cool|nice|dope|love it)/i.test(msg)) {
     return {
-      text: "Hey there! 👋 I'm Jegshaddy's assistant. I can tell you about his services, pricing, availability, or help you book a call. What would you like to know?",
-      actions: [],
+      text: "You're very welcome! 😊 Jegshaddy puts real passion into every project. Feel free to ask about pricing, services, or how we can collaborate!",
+      actions: [
+        { label: "💰 Pricing", trigger: "Pricing" },
+        { label: "💼 Services", trigger: "Services" },
+        { label: "📅 Book a Call", url: CALENDLY_LINK },
+      ],
     };
   }
 
-  // Pricing / rates
-  if (/pric|rate|cost|how much|fee|charge|budget/.test(msg)) {
+  if (/^(bye|goodbye|see ya|later|cya|take care|have a good)/i.test(msg)) {
     return {
-      text: "💰 Pricing depends on the scope of the project:\n\n• **Landing pages** — starting from $200\n• **Full websites / web apps** — from $400\n• **UI/UX Design** — from $200\n• **Monthly retainer** — custom packages available\n\nFor an accurate quote tailored to your project, let's jump on a quick call!",
+      text: "Thanks for stopping by! 🙏 Feel free to return anytime or reach out whenever you're ready to build something great. Have an awesome day! 🚀",
+      actions: [
+        { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
+        { label: "📅 Book a Call", url: CALENDLY_LINK },
+      ],
+    };
+  }
+
+  if (/^(hi|hello|hey|howdy|hiya|sup|yo|good\s*(morning|afternoon|evening)|what'?s up)/i.test(msg)) {
+    return {
+      text: "Hey there! 👋 I'm Jegshaddy's assistant. I can help you with services, pricing, CRM automations, email marketing, projects, or booking a call.\n\nWhat would you like to explore today?",
+      actions: [
+        { label: "💰 Pricing", trigger: "Pricing" },
+        { label: "💼 Services", trigger: "Services" },
+        { label: "⚡ CRM & Automations", trigger: "CRM & Automations" },
+        { label: "📧 Email Marketing", trigger: "Email Marketing" },
+        { label: "🌐 No-Code Sites", trigger: "No-Code Websites" },
+        { label: "📁 Projects", trigger: "Projects" },
+        { label: "📅 Book a Call", url: CALENDLY_LINK },
+      ],
+    };
+  }
+
+  // ── 2. Pricing (Specific services & full guide) ──
+  if (/(pric|rate|cost|how much|fee|charge|budget|quote|estimate|pricing)/i.test(msg)) {
+    // CRM & Automations pricing
+    if (/(crm|automat|zapier|make|workflow|integromat)/i.test(msg)) {
+      return {
+        text: "⚡ **CRM & Automations Pricing:**\n\n• **Single Workflow / Integration** (e.g. Zapier, Make scenario) — from $150\n• **Complete CRM Setup & Pipeline** (HubSpot, GoHighLevel, Airtable) — from $250 – $500\n• **Advanced Multi-Platform Systems** (webhooks, custom syncs, billing bots) — custom package\n\nAutomate your lead handling and save hours every week. Want to discuss your setup?",
+        actions: [
+          { label: "📅 Book a Discovery Call", url: CALENDLY_LINK },
+          { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
+          { label: "💰 Full Pricing Guide", trigger: "Pricing" },
+        ],
+      };
+    }
+
+    // Email Marketing pricing
+    if (/(email|newsletter|campaign|klaviyo|mailchimp|brevo|convertkit|drip|sequence|flow)/i.test(msg)) {
+      return {
+        text: "📧 **Email Marketing Pricing:**\n\n• **Template Design & Coding** (responsive, branded) — from $150\n• **Automated Email Sequences** (Welcome, Nurture, Abandoned Cart) — from $250\n• **Full Account Setup & Strategy** (Klaviyo, Mailchimp, Brevo, ConvertKit) — from $350\n\nReady to turn your subscribers into repeat paying customers?",
+        actions: [
+          { label: "📅 Book a Discovery Call", url: CALENDLY_LINK },
+          { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
+          { label: "💰 Full Pricing Guide", trigger: "Pricing" },
+        ],
+      };
+    }
+
+    // No-Code Website pricing
+    if (/(no\s*code|nocode|webflow|wordpress|wix|squarespace|shopify)/i.test(msg)) {
+      return {
+        text: "🌐 **No-Code Website Pricing:**\n\n• **Single-Page Landing Page** — from $200\n• **Multi-Page Website** (Webflow, WordPress, Wix, Squarespace) — from $250 – $600\n• **E-commerce or CMS Integration** — from $450\n\nIncludes complete responsive design, SEO setup, and an easy-to-use client editing dashboard!",
+        actions: [
+          { label: "📅 Book a Call", url: CALENDLY_LINK },
+          { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
+          { label: "💰 Full Pricing Guide", trigger: "Pricing" },
+        ],
+      };
+    }
+
+    // UI/UX Design pricing
+    if (/(ui|ux|figma|design)/i.test(msg) && !/(web|app|site|code)/i.test(msg)) {
+      return {
+        text: "🎨 **UI/UX Design Pricing:**\n\n• **Single Screen / Landing Page Design** (Figma) — from $200\n• **Full Product Design & Interactive Prototype** — from $400+\n• **Design System & Components** — custom tailored package\n\nIncludes wireframes, mobile & desktop mockups, and developer-ready specs!",
+        actions: [
+          { label: "📅 Book a Call", url: CALENDLY_LINK },
+          { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
+          { label: "💰 Full Pricing Guide", trigger: "Pricing" },
+        ],
+      };
+    }
+
+    // Web apps / Full-stack pricing
+    if (/(app|web\s*app|custom\s*web|full\s*stack|frontend|react|next)/i.test(msg)) {
+      return {
+        text: "💻 **Custom Web App & Development Pricing:**\n\n• **Frontend Web App** (React, Next.js) — starting from $400\n• **Full-Stack Application** (Backend, DB, Auth, APIs) — from $600 – $1,500+\n• **API Integration & Feature Add-ons** — from $200\n\nBuilt for speed, scalability, and seamless user experience!",
+        actions: [
+          { label: "📅 Book a Call", url: CALENDLY_LINK },
+          { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
+          { label: "💰 Full Pricing Guide", trigger: "Pricing" },
+        ],
+      };
+    }
+
+    // Master Pricing Overview (matches user's exact specification)
+    return {
+      text: "💰 Pricing depends on the scope of the project:\n\n• **Landing pages** — starting from $200\n• **Full websites / web apps** — from $400\n• **No-Code Website Design** — from $250\n• **CRM & Automations** — from $250\n• **Email Marketing** — from $150\n• **UI/UX Design** — from $200\n• **Monthly retainer** — custom packages available\n\nFor an accurate quote tailored to your project, let's jump on a quick call!",
+      actions: [
+        { label: "📅 Book a Call", url: CALENDLY_LINK },
+        { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
+        { label: "⚡ CRM & Automations", trigger: "CRM & Automations" },
+        { label: "📧 Email Marketing", trigger: "Email Marketing" },
+        { label: "🌐 No-Code Websites", trigger: "No-Code Websites" },
+      ],
+    };
+  }
+
+  // ── 3. Timeline & Turnaround ──
+  if (/(timeline|turnaround|how\s*long|duration|deadline|delivery|speed|turn\s*around)/i.test(msg)) {
+    return {
+      text: "⏱️ **Project Turnaround Timelines:**\n\n• **Landing Pages & No-Code Sites** — 3–5 days\n• **CRM & Workflow Automations** — 2–5 days\n• **Email Marketing Sequences** — 2–4 days\n• **UI/UX Design Projects** — 1–2 weeks\n• **Full Web Apps & Platforms** — 2–6 weeks\n\n*Have an urgent deadline? Rush delivery is available upon request!*",
+      actions: [
+        { label: "📅 Check Availability", url: CALENDLY_LINK },
+        { label: "💬 WhatsApp for Rush Job", url: WHATSAPP_LINK },
+        { label: "💰 View Pricing", trigger: "Pricing" },
+      ],
+    };
+  }
+
+  // ── 4. Availability & Hiring ──
+  if (/(availab|free|hire|hiring|contract|freelance|full\s*time|full-time|remote|open\s*to)/i.test(msg)) {
+    return {
+      text: "🟢 **Availability Status:**\n\nJegshaddy is **currently accepting new projects**! Available for:\n\n• Freelance client projects\n• Monthly retainers & ongoing maintenance\n• Contract roles & remote engineering positions\n\nLet's connect to discuss how he can support your team or business!",
       actions: [
         { label: "📅 Book a Call", url: CALENDLY_LINK },
         { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
@@ -41,10 +158,44 @@ const getBotReply = (userMsg) => {
     };
   }
 
-  // Availability
-  if (/availab|free|schedule|when|timeline|start|begin|deadline/.test(msg)) {
+  // ── 5. Process & How We Work Together ──
+  if (/(process|how\s*do\s*we\s*(work|start)|steps?|workflow|how\s*it\s*works|onboarding)/i.test(msg)) {
     return {
-      text: "📅 I'm currently open to new projects! My typical turnaround:\n\n• Landing pages — 3–5 days\n• Full web apps — 2–8 weeks\n• Design only — 1–3 weeks\n\nWant to lock in a time to discuss your project?",
+      text: "🔄 **How We Work Together (5-Step Process):**\n\n1. **Discovery & Strategy** — We align on your goals, requirements, timeline, and deliverables\n2. **Proposal & Blueprint** — Clear milestone roadmap and transparent quote\n3. **Design & Build** — Development begins with regular preview updates\n4. **Review & Refinement** — Interactive feedback rounds until everything is pixel-perfect\n5. **Launch & Handover** — Deployment, client walkthrough, and post-launch support\n\nReady to get started?",
+      actions: [
+        { label: "📅 Book Discovery Call", url: CALENDLY_LINK },
+        { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
+        { label: "💰 View Pricing", trigger: "Pricing" },
+      ],
+    };
+  }
+
+  // ── 6. Book a Call / Calendly ──
+  if (/(book|call|calendly|meeting|consult|schedule)/i.test(msg)) {
+    return {
+      text: "Let's talk! 🤝 You can book a free 30-minute discovery call directly on Calendly — no strings attached.",
+      actions: [
+        { label: "📅 Book a Call Now", url: CALENDLY_LINK },
+        { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
+      ],
+    };
+  }
+
+  // ── 7. WhatsApp ──
+  if (/(whatsapp|whats\s*app|wp|wa)/i.test(msg)) {
+    return {
+      text: "Prefer instant messaging? 📲 Reach out directly on WhatsApp for a quick response!",
+      actions: [
+        { label: "💬 Open WhatsApp", url: WHATSAPP_LINK },
+        { label: "📅 Book a Call", url: CALENDLY_LINK },
+      ],
+    };
+  }
+
+  // ── 8. Contact Form / Reach out ──
+  if (/(contact|reach\s*out|get\s*in\s*touch|send\s*(a\s*)?message|contact\s*form)/i.test(msg) && !/(email\s*market|newsletter|sequence|flow|drip)/i.test(msg)) {
+    return {
+      text: "📬 You can reach out via the contact form at the bottom of this page, chat on WhatsApp, or book a quick call. Pick whatever works best for you!",
       actions: [
         { label: "📅 Book a Call", url: CALENDLY_LINK },
         { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
@@ -52,10 +203,10 @@ const getBotReply = (userMsg) => {
     };
   }
 
-  // Services
-  if (/service|do you|what can|offer|build|create|develop|design|help|crm|automat|email market|wix|wordpress|webflow|squarespace/.test(msg)) {
+  // ── 9. Location & Timezone ──
+  if (/(location|where\s*are\s*you|where\s*do\s*you\s*live|country|timezone|time\s*zone|nigeria|lagos)/i.test(msg)) {
     return {
-      text: "🛠️ Here's what I do:\n\n• **Frontend Development** — React, Next.js, HTML/CSS\n• **UI/UX Design** — Figma, responsive design\n• **Full-Stack Web Apps $ and Mobile app development** — with backend & database\n• **CRM & Automations** — workflow automation, integrations\n• **Email Marketing** — campaigns, funnels, sequences\n• **No-Code Websites** — Wix, WordPress, Webflow, Squarespace\n\nAnd more! The best way to find out if I can help with your specific project is to jump on a quick call.",
+      text: "🌍 **Location & Working Hours:**\n\nBased in **Nigeria (WAT / UTC+1)**.\n\nJegede works seamlessly with international clients across the **US (EST/PST)**, **UK (GMT/BST)**, **Europe (CET)**, and beyond through scheduled overlap calls and responsive asynchronous communication.",
       actions: [
         { label: "📅 Book a Call", url: CALENDLY_LINK },
         { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
@@ -63,47 +214,156 @@ const getBotReply = (userMsg) => {
     };
   }
 
-  // Book a call / meeting
-  if (/book|call|meeting|schedule|calendly|talk|speak|consult|discuss/.test(msg)) {
+  // ── 10. Revisions & Guarantee & Maintenance ──
+  if (/(revision|guarantee|refund|change|support|maintenance|retainer|warranty)/i.test(msg)) {
     return {
-      text: "Let's talk! 🤝 You can book a free 30-minute discovery call directly on my Calendly — no strings attached.",
-      actions: [{ label: "📅 Book a Call Now", url: CALENDLY_LINK }],
-    };
-  }
-
-  // WhatsApp
-  if (/whatsapp|whats app|wp|wa|chat|message|text/.test(msg)) {
-    return {
-      text: "You can reach me directly on WhatsApp for a quicker response! 📲",
-      actions: [{ label: "💬 Open WhatsApp", url: WHATSAPP_LINK }],
-    };
-  }
-
-  // Contact
-  if (/contact|email|reach|get in touch/.test(msg)) {
-    return {
-      text: "You can reach out via the contact form below, WhatsApp, or book a call. Pick what works best for you!",
+      text: "🛡️ **Revisions & Quality Guarantee:**\n\n• **Revisions Included** — Iterative revisions during development until you are 100% satisfied\n• **Post-Launch Warranty** — Complimentary 14–30 days of bug fixing and adjustments after deployment\n• **Monthly Maintenance** — Retainer options available for ongoing updates, automations, and tech support\n\nClient peace of mind is guaranteed!",
       actions: [
+        { label: "💰 View Retainer Pricing", trigger: "Pricing" },
         { label: "📅 Book a Call", url: CALENDLY_LINK },
         { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
       ],
     };
   }
 
-  // Bye / thank you
-  if (/bye|goodbye|thanks|thank you|cheers|later/.test(msg)) {
+  // ── 11. Payment Terms & Methods ──
+  if (/(payment|pay\b|paying\b|how\s*(do\s*i|can\s*i|to)\s*pay|deposit|invoice|wire|transfer|stripe|paypal|wise)/i.test(msg)) {
     return {
-      text: "Thanks for stopping by! 🙏 Feel free to come back anytime. Have a great day! 🚀",
-      actions: [],
+      text: "💳 **Payment Structure & Methods:**\n\n• **Structure** — 50% upfront to lock in the schedule, and 50% upon final approval and project delivery\n• **Milestones** — Larger platforms can be divided into 3–4 milestone installments\n• **Accepted Methods** — Bank Transfer, Wise, PayPal, Crypto, or direct invoicing\n\nTransparent, secure, with no surprise costs.",
+      actions: [
+        { label: "💰 View Pricing", trigger: "Pricing" },
+        { label: "📅 Book a Call", url: CALENDLY_LINK },
+      ],
     };
   }
 
-  // Fallback
+  // ── 12. Mobile Apps / Responsiveness ──
+  if (/(mobile\s*app|responsive|mobile\s*friendly|pwa|ios|android)/i.test(msg)) {
+    return {
+      text: "📱 **Mobile & Responsive Development:**\n\nEvery build is 100% mobile-first and tested across all smartphone, tablet, and desktop screen sizes. Cross-platform mobile apps and Progressive Web Apps (PWAs) are also available depending on project needs.",
+      actions: [
+        { label: "📁 View Projects", trigger: "Projects" },
+        { label: "📅 Book a Call", url: CALENDLY_LINK },
+      ],
+    };
+  }
+
+  // ── 13. About Glory / Who is Jegshaddy? ──
+  if (/(who\s*(are\s*you|is\s*(glory|jegede|jegshaddy))|about\s*(you|yourself|glory|jegede|jegshaddy)|who\s*made\s*this|your\s*bio|your\s*background|your\s*experience|your\s*story)/i.test(msg)) {
+    return {
+      text: "👋 **About Jegede Glory (Jegshaddy):**\n\nJegede Glory is a versatile **Software Developer, UI/UX Designer, and Automation Specialist** based in Nigeria, working with international brands and clients.\n\nHe crafts high-converting websites, robust custom web apps (React/Next.js), no-code solutions (Webflow, WordPress), and automated business workflows (Zapier, Make, CRM pipelines) that drive real growth.",
+      actions: [
+        { label: "💼 View Services", trigger: "Services" },
+        { label: "📁 View Projects", trigger: "Projects" },
+        { label: "📅 Book a Call", url: CALENDLY_LINK },
+        { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
+      ],
+    };
+  }
+
+  // ── 14. CRM & Automations Capabilities ──
+  if (/(crm|automat|zapier|make\.com|make|integromat|workflow|pipeline|gohighlevel|ghl|hubspot|airtable|notion|activecampaign)/i.test(msg)) {
+    return {
+      text: "⚡ **CRM & Workflow Automations:**\n\nJegshaddy helps businesses cut out hours of manual work by connecting tools and streamlining client pipelines:\n\n• **CRM Setup & Optimization** — HubSpot, GoHighLevel, Airtable, Notion, Zoho\n• **Workflow Automation** — Zapier, Make.com, custom webhooks & REST APIs\n• **Lead & Sales Pipelines** — Auto-capture leads, sync to CRM, and trigger instant alerts\n• **Billing & Onboarding Sync** — Stripe/PayPal integrations connecting to contracts and emails\n\n**Starting from $250**. Would you like to automate your business operations?",
+      actions: [
+        { label: "💰 Automation Pricing", trigger: "CRM Pricing" },
+        { label: "📅 Book a Discovery Call", url: CALENDLY_LINK },
+        { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
+        { label: "📧 Email Marketing", trigger: "Email Marketing" },
+      ],
+    };
+  }
+
+  // ── 15. Email Marketing Capabilities ──
+  if (/(email\s*market|newsletter|klaviyo|mailchimp|brevo|convertkit|beehiiv|drip|email\s*sequence|email\s*flow)/i.test(msg)) {
+    return {
+      text: "📧 **Email Marketing & Funnels:**\n\nTurn one-off visitors into loyal, paying customers with high-converting email systems:\n\n• **Automated Sequences** — Welcome series, nurture flows, abandoned cart & re-engagement\n• **Custom Templates** — Responsive, branded HTML email designs that render cleanly on all devices\n• **Platform Setups** — Klaviyo, Mailchimp, Brevo, ConvertKit, Beehiiv\n• **Segmentation & Strategy** — Targeted campaigns designed to maximize open and click rates\n\n**Starting from $150**. Ready to launch or optimize your email marketing?",
+      actions: [
+        { label: "💰 Email Pricing", trigger: "Email Marketing Pricing" },
+        { label: "📅 Book a Discovery Call", url: CALENDLY_LINK },
+        { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
+        { label: "⚡ CRM & Automations", trigger: "CRM & Automations" },
+      ],
+    };
+  }
+
+  // ── 16. No-Code Website Design Capabilities ──
+  if (/(no\s*code|nocode|webflow|wordpress|wix|squarespace|shopify|elementor)/i.test(msg)) {
+    return {
+      text: "🌐 **No-Code Website Design:**\n\nLaunch a modern, pixel-perfect website fast that you can manage easily without touching code:\n\n• **Platforms** — Webflow, WordPress, Wix Studio, Squarespace, Shopify\n• **Custom Design** — Tailored to your brand aesthetic, not cookie-cutter templates\n• **Responsive & SEO-Ready** — Fast loading, mobile-optimized, and search engine friendly\n• **Client Handover** — Easy walkthrough so you can edit text, swap images, and add content anytime\n\n**Starting from $250**. Need a new website or a refresh?",
+      actions: [
+        { label: "💰 No-Code Pricing", trigger: "No-Code Pricing" },
+        { label: "📅 Book a Call", url: CALENDLY_LINK },
+        { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
+        { label: "📁 View Projects", trigger: "Projects" },
+      ],
+    };
+  }
+
+  // ── 17. UI / UX Design ──
+  if (/(ui\s*\/\s*ux|uiux|ui\s*design|ux\s*design|figma|wireframe|prototype|mockup)/i.test(msg)) {
+    return {
+      text: "🎨 **UI/UX & Product Design:**\n\nVisually stunning, intuitive interfaces engineered for conversion:\n\n• **Tools** — Figma, modern prototyping tools\n• **Deliverables** — Wireframes, interactive click-through prototypes, component libraries\n• **Modern Aesthetics** — High-contrast dark/light modes, accessible typography, sleek layouts\n• **Developer Handoff** — Cleanly organized assets and specs ready for engineering\n\n**Starting from $200**. Need a design system or prototype?",
+      actions: [
+        { label: "💰 UI/UX Pricing", trigger: "UI/UX Pricing" },
+        { label: "📅 Book a Call", url: CALENDLY_LINK },
+        { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
+        { label: "📁 View Projects", trigger: "Projects" },
+      ],
+    };
+  }
+
+  // ── 18. Tech Stack & Frontend / Full-Stack Coding ──
+  if (/(tech\s*stack|stack|technolog|react|next\.?js|javascript|typescript|frontend|front\s*end|backend|node|coding|developer|development)/i.test(msg)) {
+    return {
+      text: "💻 **Tech Stack & Engineering Skills:**\n\nJegshaddy builds scalable, clean-code web applications using modern technologies:\n\n• **Frontend** — React.js, Next.js, TypeScript, JavaScript (ES6+), HTML5, CSS3, SCSS, Tailwind CSS\n• **Backend & APIs** — Node.js, Express, REST APIs, database integration\n• **Deployment & Versioning** — Git, GitHub, Vercel, Render\n• **Design & Tools** — Figma, Postman\n\nCode is modular, maintainable, responsive, and performance-tuned.",
+      actions: [
+        { label: "📁 View Projects", trigger: "Projects" },
+        { label: "💰 View Pricing", trigger: "Pricing" },
+        { label: "📅 Book a Call", url: CALENDLY_LINK },
+      ],
+    };
+  }
+
+  // ── 19. Projects & Portfolio Showcase ──
+  if (/(portfolio|case\s*stud|sample|demo|soole|chacebyte|ai\s*genius|nobox|squid|pet\s*rescue|past\s*work|show\s*(me\s*)?(your\s*)?(project|work)|what\s*(have\s*you|did\s*you)\s*(built|made|created)|projects\b)/i.test(msg)) {
+    return {
+      text: "🚀 **Featured Projects by Jegshaddy:**\n\n• **SOÓLÈ** — Mobility waitlist platform (HTML, CSS, JS)\n• **Chacebyte** — Tech corporate & consulting platform (React, TypeScript, SCSS, APIs)\n• **AI Genius** — AI-powered chat application (React, API Integration)\n• **NOBOX** — Modern cloud product & UI/UX showcase\n• **Pet Rescue & Squid Game** — Creative interactive web experiences\n\nExplore live links and GitHub repositories in the **Projects** section right below on this page!",
+      actions: [
+        { label: "💼 All Services", trigger: "Services" },
+        { label: "💰 View Pricing", trigger: "Pricing" },
+        { label: "📅 Book a Call", url: CALENDLY_LINK },
+        { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
+      ],
+    };
+  }
+
+  // ── 20. General Services Overview ──
+  if (/(service|what\s*(do|can)\s*you\s*(do|offer|build|make)|help)/i.test(msg)) {
+    return {
+      text: "🛠️ **Here's what Jegshaddy does:**\n\n• **Frontend & Web Apps** — React, Next.js, HTML/CSS, TypeScript\n• **No-Code Websites** — Wix, WordPress, Webflow, Squarespace, Shopify\n• **CRM & Automations** — Zapier, Make.com, HubSpot, lead pipelines\n• **Email Marketing** — Campaigns, drip sequences, newsletter design\n• **UI/UX Design** — Figma, responsive prototypes & design systems\n• **Full-Stack Web & Mobile Apps** — Backend APIs, databases & integrations\n\nWhat would you like to build?",
+      actions: [
+        { label: "💰 Pricing Guide", trigger: "Pricing" },
+        { label: "⚡ CRM & Automations", trigger: "CRM & Automations" },
+        { label: "📧 Email Marketing", trigger: "Email Marketing" },
+        { label: "🌐 No-Code Websites", trigger: "No-Code Websites" },
+        { label: "📁 Featured Projects", trigger: "Projects" },
+        { label: "📅 Book a Call", url: CALENDLY_LINK },
+      ],
+    };
+  }
+
+  // ── 21. Smart Fallback ──
   return {
-    text: "That's a great question! The best way to get a proper answer is to book a quick call — Jegshaddy will be happy to walk you through everything. 📅",
+    text: "That's a great question! While I don't have the exact answer in my quick reference, Jegshaddy will be happy to walk you through it directly. 🚀\n\nFeel free to explore our services, check out pricing, or reach out directly:",
     actions: [
+      { label: "💰 Pricing", trigger: "Pricing" },
+      { label: "💼 Services", trigger: "Services" },
+      { label: "⚡ CRM & Automations", trigger: "CRM & Automations" },
+      { label: "📧 Email Marketing", trigger: "Email Marketing" },
+      { label: "📁 Projects", trigger: "Projects" },
       { label: "📅 Book a Call", url: CALENDLY_LINK },
-      { label: "💬 Chat on WhatsApp", url: WHATSAPP_LINK },
+      { label: "💬 WhatsApp", url: WHATSAPP_LINK },
     ],
   };
 };
@@ -123,10 +383,14 @@ const Chatbot = () => {
     {
       id: 1,
       from: "bot",
-      text: "Hi there! 👋 I'm Jegshaddy's virtual assistant. Ask me anything — pricing, services, availability, or how to get in touch!",
+      text: "Hi there! 👋 I'm Jegshaddy's virtual assistant. Ask me anything — pricing, services, CRM automations, email marketing, projects, or how to get started!",
       actions: [
-        { label: "💼 Services", trigger: "services" },
-        { label: "💰 Pricing", trigger: "pricing" },
+        { label: "💰 Pricing", trigger: "Pricing" },
+        { label: "💼 Services", trigger: "Services" },
+        { label: "⚡ CRM & Automations", trigger: "CRM & Automations" },
+        { label: "📧 Email Marketing", trigger: "Email Marketing" },
+        { label: "🌐 No-Code Sites", trigger: "No-Code Websites" },
+        { label: "📁 Projects", trigger: "Projects" },
         { label: "📅 Book a Call", url: CALENDLY_LINK },
         { label: "💬 WhatsApp", url: WHATSAPP_LINK },
       ],
