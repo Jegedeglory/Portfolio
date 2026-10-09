@@ -13,7 +13,6 @@ import Soole from "./Images/Soole.png";
 import Chacebyte from "./Images/Chacebyte.png";
 import AIGenius from "./Images/AIGenius.png";
 import Nobox from "./Images/Nobox.png";
-import CrmPipeline from "./Images/pipedrive-crm.png";
 
 // ─── Chatbot Knowledge Base ───────────────────────────────────────────────────
 const WHATSAPP_LINK = "https://wa.me/2349167712906";
@@ -329,7 +328,7 @@ const getBotReply = (userMsg) => {
   // ── 19. Projects & Portfolio Showcase ──
   if (/(portfolio|case\s*stud|sample|demo|soole|chacebyte|ai\s*genius|nobox|squid|pet\s*rescue|past\s*work|show\s*(me\s*)?(your\s*)?(project|work)|what\s*(have\s*you|did\s*you)\s*(built|made|created)|projects\b)/i.test(msg)) {
     return {
-      text: "🚀 **Featured Projects by Jegshaddy:**\n\n• **Pipedrive CRM Setup** — Sales pipeline, custom deal stages & lead workflow automations\n• **SOÓLÈ** — Mobility waitlist platform (HTML, CSS, JS)\n• **Chacebyte** — Tech corporate & consulting platform (React, TypeScript, SCSS, APIs)\n• **AI Genius** — AI-powered chat application (React, API Integration)\n• **NOBOX** — Modern cloud product & UI/UX showcase\n• **Pet Rescue & Squid Game** — Creative interactive web experiences\n\nExplore live links and details in the **Projects** section right below on this page!",
+      text: "🚀 **Featured Projects by Jegshaddy:**\n\n• **SOÓLÈ** — Mobility waitlist platform (HTML, CSS, JS)\n• **Chacebyte** — Tech corporate & consulting platform (React, TypeScript, SCSS, APIs)\n• **AI Genius** — AI-powered chat application (React, API Integration)\n• **NOBOX** — Modern cloud product & UI/UX showcase\n• **Pet Rescue & Squid Game** — Creative interactive web experiences\n\nExplore live links and details in the **Projects** section right below on this page!",
       actions: [
         { label: "💼 All Services", trigger: "Services" },
         { label: "💰 View Pricing", trigger: "Pricing" },
@@ -891,43 +890,6 @@ const Home = () => {
                   </a>
                   <a href="https://github.com/Jegedeglory/soole" className="underline">
                     View code
-                  </a>
-                </div>
-              </div>
-              <div className="projects_item">
-                <picture className="projects_picture">
-                  <source media="(min-width: 62.5em)" srcSet={CrmPipeline} />
-                  <img
-                    src={CrmPipeline}
-                    alt="Pipedrive CRM Setup & Pipeline"
-                    width={343}
-                    height={253}
-                    className="projects_image"
-                  />
-                </picture>
-                <h3 className="projects_name">Pipedrive CRM Setup</h3>
-                <p className="project_tags">
-                  <span>PIPEDRIVE</span>
-                  <span>CRM SETUP</span>
-                  <span>SALES PIPELINE</span>
-                  <span>AUTOMATIONS</span>
-                </p>
-                <div className="projects_links">
-                  <a
-                    href={CALENDLY_LINK}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline"
-                  >
-                    Book Setup Call
-                  </a>
-                  <a
-                    href={WHATSAPP_LINK}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline"
-                  >
-                    Inquire on WhatsApp
                   </a>
                 </div>
               </div>
