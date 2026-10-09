@@ -262,9 +262,9 @@ const getBotReply = (userMsg) => {
   }
 
   // ── 14. CRM & Automations Capabilities ──
-  if (/(crm|automat|zapier|make\.com|make|integromat|workflow|pipeline|gohighlevel|ghl|hubspot|airtable|notion|activecampaign)/i.test(msg)) {
+  if (/(crm|automat|zapier|make\.com|make|integromat|workflow|pipeline|gohighlevel|ghl|hubspot|fluid|pipedrive|activecampaign)/i.test(msg)) {
     return {
-      text: "⚡ **CRM & Workflow Automations:**\n\nJegshaddy helps businesses cut out hours of manual work by connecting tools and streamlining client pipelines:\n\n• **CRM Setup & Optimization** — HubSpot, GoHighLevel, Airtable, Notion, Zoho\n• **Workflow Automation** — Zapier, Make.com, custom webhooks & REST APIs\n• **Lead & Sales Pipelines** — Auto-capture leads, sync to CRM, and trigger instant alerts\n• **Billing & Onboarding Sync** — Stripe/PayPal integrations connecting to contracts and emails\n\n**Starting from $250**. Would you like to automate your business operations?",
+      text: "⚡ **CRM & Workflow Automations:**\n\nJegshaddy helps businesses cut out hours of manual work by connecting tools and streamlining client pipelines:\n\n• **CRM Setup & Optimization** — HubSpot, GoHighLevel, Pipedrive, Fluid, Zoho\n• **Workflow Automation** — Zapier, Make.com, custom webhooks & REST APIs\n• **Lead & Sales Pipelines** — Auto-capture leads, sync to CRM, and trigger instant alerts\n• **Billing & Onboarding Sync** — Stripe/PayPal integrations connecting to contracts and emails\n\n**Starting from $250**. Would you like to automate your business operations?",
       actions: [
         { label: "💰 Automation Pricing", trigger: "CRM Pricing" },
         { label: "📅 Book a Discovery Call", url: CALENDLY_LINK },
