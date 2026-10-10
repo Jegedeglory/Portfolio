@@ -1,0 +1,10 @@
+{
+  "name": "portfolio-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npm --prefix portfolio_website start",
+    "build": "npm --prefix portfolio_website build",
+    "backend": "npm --prefix portfolio_backend start"
+  }
+}

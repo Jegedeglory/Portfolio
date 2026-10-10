@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import "./Home.css";
+import { trackVisitor } from "../utils/trackVisitor";
 import Picture348w from "./Images/profile-image-desktop.png";
 import Picture646w from "./Images/profile-image-tablet.jpg";
 import Picture890w from "./Images/profile-image-mobile.png";
@@ -579,6 +580,10 @@ const Home = () => {
   const form = useRef();
   const [toast, setToast] = useState({ visible: false, message: "", type: "success" });
   const [isSending, setIsSending] = useState(false);
+
+  useEffect(() => {
+    trackVisitor();
+  }, []);
 
   const showToast = (message, type = "success") => {
     setToast({ visible: true, message, type });

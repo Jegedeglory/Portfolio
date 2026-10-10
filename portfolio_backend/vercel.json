@@ -4,6 +4,10 @@
     {
       "src": "api/send.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "api/visit.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
@@ -14,6 +18,14 @@
     {
       "src": "/api/send",
       "dest": "/api/send.js"
+    },
+    {
+      "src": "/visit",
+      "dest": "/api/visit.js"
+    },
+    {
+      "src": "/api/visit",
+      "dest": "/api/visit.js"
     },
     {
       "src": "/(.*)",
